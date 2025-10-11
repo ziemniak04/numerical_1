@@ -1,59 +1,79 @@
+/**
+ * @file nm1.cpp
+ * @brief Sieve of Eratosthenes implementation for finding prime numbers.
+ * 
+ * This program finds all prime numbers up to a given limit N using the Sieve of Eratosthenes
+ * algorithm. The limit can be provided as a command-line argument or defaults to 100,000,000.
+ */
+
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <cstdlib>
 using namespace std;
 
-int main(int argc, char* argv[]) {
-    int N = 100000000; // znajdź liczby pierwsze do 100 milionów
-    if (argc > 1) {
-        N = atoi(argv[1]);
-    }
-    bool *isPrime = new bool[N + 1]; // tablica logiczna
-
-    // zakładamy, że wszystkie liczby są pierwsze
-    for (int i = 0; i <= N; i++) {
+/**
+ * @brief Implements the Sieve of Eratosthenes algorithm.
+ * 
+ * @param n The upper limit for finding prime numbers
+ * @return A boolean array where isPrime[i] is true if i is prime
+ */
+bool* sieveOfEratosthenes(int n) {
+    bool* isPrime = new bool[n + 1];
+    
+    for (int i = 0; i <= n; i++) {
         isPrime[i] = true;
     }
-
-    // 0 i 1 nie są pierwsze
+    
     isPrime[0] = false;
     isPrime[1] = false;
-
-    // tylko do pierwiastka z N
-    int limit = sqrt(N);
-
-    // sito Eratostenesa
+    
+    int limit = sqrt(n);
+    
     for (int i = 2; i <= limit; i++) {
-        if (isPrime[i]) { // jeśli i jest pierwsze
-            // wykreślamy wielokrotności i
-            for (int j = i * i; j <= N; j += i) {
+        if (isPrime[i]) {
+            for (int j = i * i; j <= n; j += i) {
                 isPrime[j] = false;
             }
         }
     }
+    
+    return isPrime;
+}
 
-    // zapisujemy liczby pierwsze do wektora i liczymy
+/**
+ * @brief Collects all prime numbers from the sieve result.
+ * 
+ * @param isPrime Boolean array indicating which numbers are prime
+ * @param n The upper limit that was checked
+ * @return Vector containing all prime numbers up to n
+ */
+vector<int> collectPrimes(bool* isPrime, int n) {
     vector<int> primes;
-    int count = 0;
-
-    for (int i = 2; i <= N; i++) {
+    
+    for (int i = 2; i <= n; i++) {
         if (isPrime[i]) {
-            primes.push_back(i); // dodajemy do listy
-            count++;             // zwiększamy licznik
+            primes.push_back(i);
         }
     }
+    
+    return primes;
+}
 
-    cout << "Liczb pierwszych do " << N << " jest: " << count << endl;
-
-    // przykład: wypisz pierwsze 10 liczb pierwszych
+/**
+ * @brief Prints the results including total count and first 10 prime numbers.
+ * 
+ * @param n The upper limit that was checked
+ * @param primes Vector of all prime numbers found
+ */
+void printResults(int n, const vector<int>& primes) {
+    cout << "Liczb pierwszych do " << n << " jest: " << primes.size() << endl;
+    
     cout << "Pierwsze 10 liczb pierwszych: ";
     for (int i = 0; i < 10 && i < primes.size(); i++) {
         cout << primes[i] << " ";
     }
     cout << endl;
-
-    delete[] isPrime; // sprzątamy pamięć
-
-    return 0;
 }
+
+/
