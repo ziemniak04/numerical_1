@@ -1,14 +1,13 @@
 #include <iostream>
-#include <vector>
 #include <cmath>
 #include <cstdlib>
 using namespace std;
 
 /**
  * The main function serves as the entry point for the program.
- * It implements the Sieve of Eratosthenes algorithm using a C-style
- * dynamic array (bool*) for the sieve flags and a C++ standard library
- * vector (std::vector<int>) to store the resulting prime numbers.
+ * It implements the Sieve of Eratosthenes algorithm using dynamic
+ * C-style arrays (pointers) to efficiently find all prime numbers
+ * up to a specified limit N.
  *
  * It takes the upper limit N as an optional command-line argument.
  *
@@ -21,6 +20,7 @@ int main(int argc, char* argv[]) {
     if (argc > 1) {
         N = atoi(argv[1]);
     }
+
     bool *isPrime = new bool[N + 1];
 
     for (int i = 0; i <= N; i++) {
@@ -40,25 +40,33 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    vector<int> primes;
     int count = 0;
+    for (int i = 2; i <= N; i++) {
+        if (isPrime[i]) {
+            count++;
+        }
+    }
+
+    int *primes = new int[count];
+    int index = 0;
 
     for (int i = 2; i <= N; i++) {
         if (isPrime[i]) {
-            primes.push_back(i);
-            count++;
+            primes[index] = i;
+            index++;
         }
     }
 
     cout << "Liczb pierwszych do " << N << " jest: " << count << endl;
 
     cout << "Pierwsze 10 liczb pierwszych: ";
-    for (int i = 0; i < 10 && i < primes.size(); i++) {
+    for (int i = 0; i < 10 && i < count; i++) {
         cout << primes[i] << " ";
     }
     cout << endl;
 
     delete[] isPrime;
+    delete[] primes;
 
     return 0;
 }
