@@ -19,7 +19,7 @@ public class nm1 {
      * Defaults to 10,000,000.
      */
     public static void main(String[] args) {
-        int N = 10000000;
+        int N = 100000000;
         if (args.length > 0) {
             N = Integer.parseInt(args[0]);
         }

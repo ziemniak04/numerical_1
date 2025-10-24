@@ -16,7 +16,7 @@ using namespace std;
  * @return Returns 0 upon successful completion.
  */
 int main(int argc, char* argv[]) {
-    int N = 10000000;
+    int N = 100000000;
     if (argc > 1) {
         N = atoi(argv[1]);
     }

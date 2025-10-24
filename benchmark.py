@@ -1,8 +1,9 @@
 """
 Benchmark script for comparing execution times of Sieve of Eratosthenes implementations.
 
-This script benchmarks implementations in C++, Java, and Python across different input sizes
-(N values from 10^3 to 10^6) and generates a comparison plot.
+This script benchmarks implementations in C++, Java, and Python for a given input size.
+By default it is set to run a single large benchmark at N = 10_000_000 (10 million).
+Be careful: running the default benchmark may take a long time depending on your hardware.
 """
 
 import subprocess
@@ -84,13 +85,19 @@ def plot_results(langs, Ns, times):
     plt.title('Comparison of Execution Times for Sieve of Eratosthenes')
     plt.legend()
     plt.grid(True)
-    plt.xticks(Ns, ['10^3', '10^4', '10^5', '10^6'])
+    # Adjust x-ticks based on provided Ns (supports a single large N by default)
+    try:
+        labels = [f"{n:,}" for n in Ns]
+    except Exception:
+        labels = [str(n) for n in Ns]
+    plt.xticks(Ns, labels)
     plt.savefig('benchmark_plot.png')
     plt.show()
 
 
 if __name__ == '__main__':
-    Ns = [1000, 10000, 100000, 1000000]
+    # Default: benchmark for 10 million
+    Ns = [10_000_000]
     langs = ['cpp', 'java', 'python']
     
     times = run_benchmarks(langs, Ns)

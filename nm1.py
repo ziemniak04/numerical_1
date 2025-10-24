@@ -18,22 +18,25 @@ def sieve_of_eratosthenes(n):
     Returns:
         list: List of all prime numbers up to n
     """
-    isPrime = [True] * (n + 1)
-    isPrime[0] = False
-    isPrime[1] = False
-    
+    # Use a bytearray for memory efficiency: 1 byte per flag (1 = prime candidate, 0 = not prime)
+    isPrime = bytearray(b"\x01") * (n + 1)
+    if n >= 0:
+        isPrime[0] = 0
+    if n >= 1:
+        isPrime[1] = 0
+
     limit = int(n ** 0.5)
-    
+
     for i in range(2, limit + 1):
         if isPrime[i]:
-            for j in range(i * i, n + 1, i):
-                isPrime[j] = False
-    
-    primes = []
-    for i in range(2, n + 1):
-        if isPrime[i]:
-            primes.append(i)
-    
+            step = i
+            start = i * i
+            # mark multiples as non-prime (0)
+            for j in range(start, n + 1, step):
+                isPrime[j] = 0
+
+    # Collect primes
+    primes = [i for i in range(2, n + 1) if isPrime[i]]
     return primes
 
 
